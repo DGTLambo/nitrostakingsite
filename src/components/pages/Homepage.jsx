@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "800px",
     height: "100%",
     display: "flex",
-    flexDirection: "column",
+    alignItems: "center",
     paddingBottom: "100px",
   },
   about: {
@@ -82,32 +82,34 @@ function Homepage() {
     <meta charSet="utf-8" />
     <title>Home | {config.appName}</title>
   </Helmet>
-  <Section background={<ChartBackground style={{width:"100%"}}/>}>
+  <Section background={<ChartBackground style={{width:"100%"}}/>} className={classes.hero}>
     <Box className={classes.main}>
-      <Typography component={'h1'} variant={'h3'} style={{}}>
-        Apply Nitro To Your Portfolio
-      </Typography>
-      <Typography component={'p'} >
-        NIST boost your APY by applying Nitro to volatility
-      </Typography>
-      <Box display="flex" my={2}>
-        <Button
-          variant="contained"
-          color="primary"
-          href="https://lambodegens.medium.com/"
-          target="_blank"
-          style={{marginRight: 16}}
-        >
-          Medium articles
-        </Button>
-        <Button
-            variant="outlined"
-            color="secondary"
-            href={config.swapUrl}
-            target="_blank"
-        >
-          Swap
-        </Button>
+      <Box>
+        <Typography component={'h1'} variant={'h3'} style={{}}>
+          Apply Nitro To Your Portfolio
+        </Typography>
+        <Typography component={'p'} >
+          NIST boost your APY by applying Nitro to volatility
+        </Typography>
+        <Box display="flex" my={2}>
+          <Button
+              variant="contained"
+              color="primary"
+              href="https://lambodegens.medium.com/"
+              target="_blank"
+              style={{marginRight: 16}}
+          >
+            Medium articles
+          </Button>
+          <Button
+              variant="outlined"
+              color="secondary"
+              href={config.swapUrl}
+              target="_blank"
+          >
+            Swap
+          </Button>
+      </Box>
       </Box>
     </Box>
   </Section>
@@ -133,10 +135,10 @@ function Homepage() {
       <Paper className={classes.card}>
         <Typography component={"h3"} variant={"h5"} align={"center"}>Automatic payout</Typography>
         <Typography component={"p"}>
-          Hold {config.stakingMinRequired}{config.ticker} or more to be receive your
+          Hold {config.stakingMinRequired} {config.ticker} minimum (more {config.ticker} means more income) to receive your Ethereuem
           staking rewards directly to your wallet. Your rewards will be accumulated
-          until it reaches {config.minEthForAutomaticReward}ETH. If you want to claim
-          them before, you can do so in the NIST dashboard.
+          until it reaches {config.minEthForAutomaticReward} ETH. If you want to claim them before, you can do so
+          in the NIST dashboard.
         </Typography>
       </Paper>
       <Paper className={classes.card}>
@@ -170,7 +172,7 @@ function Homepage() {
           <Typography component={"h3"} variant={"h5"}>Buying</Typography>
         </Box>
         <Typography component={"p"}>
-          You receive the Nitro % of you buy order in bonus {config.ticker}.
+          You receive the Nitro % of your buy order in bonus {config.ticker}.
         </Typography>
         <Typography component={"p"}>
           Example: Nitro is at 3% and you buy 100{config.ticker}, you will receive 103{config.ticker}.

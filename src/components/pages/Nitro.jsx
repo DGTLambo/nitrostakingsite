@@ -213,20 +213,20 @@ function NitroPage() {
               <Typography variant={'h5'}>TWAP</Typography>
             </Box>
             <Box>
-              <Typography>{round(1/twap,3)} ETH/LAMBO</Typography>
+              <Typography>{round(1/twap,3)} ETH/{config.ticker}</Typography>
               <Typography>Update {timeLeftBeforeTwapUpdate}</Typography>
             </Box>
             <Box className={classes.priceHeader}>
               <Typography variant={'h5'}>Buy price</Typography>
             </Box>
             <Box>
-              <Typography> {round(buyPrice(), 3)} ETH/LAMBO</Typography>
+              <Typography> {round(buyPrice(), 3)} ETH/{config.ticker}</Typography>
             </Box>
             <Box className={classes.priceHeader}>
               <Typography variant={'h5'}>Sell price</Typography>
             </Box>
             <Box>
-              <Typography>{round(sellPrice(), 3)} ETH/LAMBO</Typography>
+              <Typography>{round(sellPrice(), 3)} ETH/{config.ticker}</Typography>
             </Box>
           </Box>
         </Box>
@@ -253,7 +253,10 @@ function NitroPage() {
           </Typography>
           <Box textAlign={"center"}>
             <Typography component={'p'} variant={'h6'} align={'center'} gutterBottom={true}>
-              Pending rewards: 0{config.ticker}
+              Your status: Not eligible
+            </Typography>
+            <Typography component={'p'} variant={'h6'} align={'center'} gutterBottom={true}>
+              Pending rewards: 0 ETH
             </Typography>
             <Button color={"primary"} variant={"contained"}>
               Claim

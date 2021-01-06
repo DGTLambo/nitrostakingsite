@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1,2),
     borderRadius: theme.shape.borderRadius,
     boxShadow: theme.shadows[0],
-    [theme.breakpoints.down("md")]:{
+    [theme.breakpoints.down("sm")]:{
       display:"none",
     }
   },
@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
   },
   links: {
     color: theme.palette.primary.contrastText,
-    margin: `0 ${theme.spacing(2)}px`,
+    margin: `0 ${theme.spacing(1)}px`,
     "&:hover":{
       color: theme.palette.primary.contrastText
     },
@@ -65,14 +65,14 @@ const useStyles = makeStyles((theme) => ({
       color: "gray",
       textDecoration: "none"
     },
-    [theme.breakpoints.down("md")]:{
+    [theme.breakpoints.down("sm")]:{
       fontSize: "1.1em",
       padding: theme.spacing(1)
     }
   },
   toggleMenu: {
     display: "none",
-    [theme.breakpoints.down("md")]:{
+    [theme.breakpoints.down("sm")]:{
       display: "inline-block"
     }
   }
