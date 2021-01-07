@@ -105,7 +105,7 @@ function Homepage() {
               variant="outlined"
               color="secondary"
               href={config.swapUrl}
-              target="_blank"
+              target="_blank" rel="noopener noreferrer"
           >
             Swap
           </Button>

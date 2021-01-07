@@ -139,7 +139,7 @@ const theme = createMuiTheme({
           border: `4px solid ${secondaryColor}`,
         }
       },
-      disabled: {
+      "&$disabled": {
         boxShadow: "none",
       },
       outlined: {

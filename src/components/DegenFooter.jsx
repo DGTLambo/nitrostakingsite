@@ -6,6 +6,8 @@ import {ReactComponent as TwitterIcon} from "../images/twitter.svg";
 import {ReactComponent as DiscordIcon} from "../images/discord.svg";
 import {ReactComponent as MediumIcon} from "../images/medium.svg";
 import {ReactComponent as TelegramIcon} from "../images/telegram.svg";
+import Button from "@material-ui/core/Button";
+import {config} from "../config";
 
 const useStyles = makeStyles((theme) => ({
     bottomNav: {
@@ -35,16 +37,16 @@ export default function DegenFooter(props) {
   const classes = useStyles(props)
   return (
     <Box className={classes.bottomNav}>
-        <IconButton color={props.theme === "dark"?"secondary":"primary"} openUrl="https://twitter.com/LamboDegens">
+        <IconButton color={props.theme === "dark"?"secondary":"primary"} href={config.tweeter} target="_blank" rel="noopener noreferrer">
             <TwitterIcon className={classes.logo}/>
         </IconButton>
-        <IconButton color={props.theme === "dark"?"secondary":"primary"} openUrl="https://discord.com/invite/G7j3QJh">
+        <IconButton color={props.theme === "dark"?"secondary":"primary"} href={config.discord} target="_blank" rel="noopener noreferrer">
           <DiscordIcon className={classes.logo}/>
         </IconButton>
-        <IconButton color={props.theme === "dark"?"secondary":"primary"} openUrl="https://medium.com/@lambodegens/lambo-boosting-the-trust-and-value-in-the-defi-world-6fc8c369f7bc">
+        <IconButton color={props.theme === "dark"?"secondary":"primary"} href={config.medium} target="_blank" rel="noopener noreferrer">
             <MediumIcon className={classes.logo}/>
         </IconButton>
-        <IconButton color={props.theme === "dark"?"secondary":"primary"} openUrl="https://t.me/joinchat/SVEU7knIZrImEFy1dFd05Q">
+        <IconButton color={props.theme === "dark"?"secondary":"primary"} href={config.telegram} target="_blank" rel="noopener noreferrer">
             <TelegramIcon color={"white"} className={classes.logo}/>
         </IconButton>
     </Box>

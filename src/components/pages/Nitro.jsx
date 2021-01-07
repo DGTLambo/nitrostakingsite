@@ -197,13 +197,13 @@ function NitroPage() {
               Nitro
             </Typography>
             <Box p={2}>
-              <Typography variant={'body'} component={"p"}>
+              <Typography variant={'body1'} component={"p"}>
                 Monitor the buy price and sell price with ease. The prices on the right factor in the bonus when buying and the penalty when selling.
               </Typography>
               <Typography variant={'p'} component={"p"}>
 
               </Typography>
-              <Typography variant={'body'} component={"p"}>
+              <Typography variant={'body1'} component={"p"}>
                 Itching to get an edge in the game? Learn more nerdy details on our <a href={"https://lambodegens.medium.com/lambo-boosting-the-trust-and-value-in-the-defi-world-6fc8c369f7bc"} target={"_blank"}>Medium account</a>.
               </Typography>
             </Box>
