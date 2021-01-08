@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     zIndex: "100",
   },
   banner:{
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: theme.palette.secondary.dark,
     color: theme.palette.primary.contrastText,
     display: "flex",
     justifyContent: "center",

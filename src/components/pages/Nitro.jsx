@@ -120,8 +120,8 @@ function NitroPage() {
       if (contract) {
           contract.methods.calculateCurrentNitroRate().call()
               .then(nitroRate => {
-                setPenalty(Web3.utils.fromWei(nitroRate[0],'ether'))
-                setBonus(Web3.utils.fromWei(nitroRate[1], 'ether'))
+                setBonus(Web3.utils.fromWei(nitroRate[0], 'ether'))
+                setPenalty(Web3.utils.fromWei(nitroRate[1],'ether'))
               })
               .catch(() => {
                 alertError("Couldn't load Nitro rate");

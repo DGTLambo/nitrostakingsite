@@ -1,8 +1,10 @@
 import {presaleAbi} from './abis/presale';
 import {tokenAbi} from './abis/token'
+import {lamboContract} from "./abis/lamboContract";
 
-export const TOKEN_CONTRACT = "token"
-export const PRESALE_CONTRACT = "presale"
+export const TOKEN_CONTRACT = "token";
+export const PRESALE_CONTRACT = "presale";
+export const LAMBO_CONTRACT = "lambo";
 
 export const contracts = {
     1: {
@@ -24,5 +26,9 @@ export const contracts = {
             address: null,
             abi: presaleAbi,
         },
+        [LAMBO_CONTRACT]:{
+            address: "0xbB21A3A8098D9F0197CE936268F185f1B6CAa0e4",
+            abi: lamboContract
+        }
     }
 }

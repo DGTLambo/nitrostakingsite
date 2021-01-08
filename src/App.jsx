@@ -3,7 +3,7 @@ import Web3 from 'web3'
 import Container from '@material-ui/core/Container'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import {createMuiTheme, withStyles, ThemeProvider} from '@material-ui/core/styles';
-import { HashRouter as Router, Switch, Route } from 'react-router-dom'
+import {HashRouter as Router, Switch, Route, Link} from 'react-router-dom'
 import Homepage from './components/pages/Homepage'
 import NitroPage from './components/pages/Nitro'
 import DegenNavbar from './components/DegenNavbar'
@@ -15,9 +15,11 @@ import Box from '@material-ui/core/Box'
 import {AstroSpace} from "./fonts/AstroSpace";
 import MusicProvider from "./components/MusicProvider";
 import AlertProvider from "./components/AlertProvider";
-import PresalePage from "./components/PreSale";
+import PresalePage from "./components/pages/Presale";
 import NistProvider from "./components/NistProvider";
 import {Web3ReactProvider} from "@web3-react/core";
+import {Typography} from "@material-ui/core";
+import Button from "@material-ui/core/Button";
 
 /* CSS Styles */
 const useStyles = {
@@ -180,6 +182,9 @@ class App extends React.Component {
                           >
                             <Box className={classes.navContainer}>
                               <DegenNavbar>
+                                <Typography>Presale starts on January 9th</Typography>
+                                <Box ml={2}></Box>
+                                <Button color={"secondary"} variant={"outlined"} component={Link} to={"/presale"}>Visit presale</Button>
                               </DegenNavbar>
                             </Box>
                             <Box className={classes.contentContainer}>

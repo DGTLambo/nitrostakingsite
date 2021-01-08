@@ -2,13 +2,14 @@ import React, {createContext, useContext, useEffect, useState} from "react";
 import {useWeb3React} from "@web3-react/core";
 import {useAlerts} from "./AlertProvider";
 import {injected} from "../connectors";
-import {contracts, PRESALE_CONTRACT, TOKEN_CONTRACT} from "../contracts";
+import {contracts, LAMBO_CONTRACT, PRESALE_CONTRACT, TOKEN_CONTRACT} from "../contracts";
 
 const NistContext = createContext();
 
 export default function NistProvider(props){
     const { error, chainId, active, activate, library } = useWeb3React();
     const [ failedActivate, setFailedActivate ] = useState(true);
+    const [ tried, setTried] = useState(false);
     const {alertWarning, alertError} = useAlerts()
 
     if (error){
@@ -16,11 +17,14 @@ export default function NistProvider(props){
     }
 
     useEffect(() => {
-        if (!active){
+        if (!active && !tried){
             injected.isAuthorized().then(isAuthorized => {
-                if (isAuthorized) {
-                    activate(injected).catch(() => setFailedActivate(true));
-                    alertWarning("Couldn't connect your wallet")
+                if (isAuthorized && !tried) {
+                    setTried(true);
+                    activate(injected).catch(() => {
+                        setFailedActivate(true)
+                        alertWarning("Couldn't reconnect your wallet")
+                    });
                 }
             })
         }
@@ -49,13 +53,25 @@ export default function NistProvider(props){
             return false;
         }
         const contract = contracts[chainId][PRESALE_CONTRACT];
-        console.log(contract)
         return new library.eth.Contract(contract.abi, contract.address);
 
     }
 
+    const getLamboContract = () => {
+        if (!active) {
+            alertError("Wallet must be connected.");
+            return false;
+        }
+        if (!contracts[chainId] || !contracts[chainId][LAMBO_CONTRACT].address){
+            alertError("Lambo contract is not supported on this chain");
+            return false;
+        }
+        const contract = contracts[chainId][LAMBO_CONTRACT];
+        return new library.eth.Contract(contract.abi, contract.address);
+    }
+
     return (
-        <NistContext.Provider value={{getNistContract, getPresaleContract, failedActivate}}>
+        <NistContext.Provider value={{getNistContract, getPresaleContract, failedActivate, getLamboContract}}>
             {props.children}
         </NistContext.Provider>
     )
