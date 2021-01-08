@@ -17,7 +17,7 @@ export const contracts = {
     },
     3: {
         [TOKEN_CONTRACT]: {
-            address: "0xcd75105ab9cfd3e056d8ccf9ab083575fce8add0",
+            address: "0x0aed50565c5b9A460e139fdE12779DacD4e305Fb",
             abi: tokenAbi
         },
         [PRESALE_CONTRACT]: {

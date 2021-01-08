@@ -7,7 +7,6 @@ import SkipNextIcon from "@material-ui/icons/SkipNext";
 import React from "react";
 import {useMusic} from "./MusicProvider";
 import {makeStyles} from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
 
 const useStyles = makeStyles((theme) => ({
     title: {

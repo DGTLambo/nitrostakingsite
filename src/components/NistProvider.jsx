@@ -2,14 +2,14 @@ import React, {createContext, useContext, useEffect, useState} from "react";
 import {useWeb3React} from "@web3-react/core";
 import {useAlerts} from "./AlertProvider";
 import {injected} from "../connectors";
-import {contracts, TOKEN_CONTRACT} from "../contracts";
+import {contracts, PRESALE_CONTRACT, TOKEN_CONTRACT} from "../contracts";
 
 const NistContext = createContext();
 
 export default function NistProvider(props){
-    const { error, chainId, active, activate, account, library } = useWeb3React();
+    const { error, chainId, active, activate, library } = useWeb3React();
     const [ failedActivate, setFailedActivate ] = useState(true);
-    const {alertWarning} = useAlerts()
+    const {alertWarning, alertError} = useAlerts()
 
     if (error){
         alertWarning("Couldn't connect your wallet")
@@ -27,22 +27,35 @@ export default function NistProvider(props){
     }, [])
 
     const getNistContract = () => {
-        if (active){
-            const contract = contracts[chainId][TOKEN_CONTRACT];
-            return library.eth.Contract(contract.abi, contract.address)
+        if (!active) {
+            alertError("Wallet must be connected.");
+            return false;
         }
-        return false;
+        if (!contracts[chainId] || !contracts[chainId][TOKEN_CONTRACT].address){
+            alertError("Nist contract is not supported on this chain");
+            return false;
+        }
+        const contract = contracts[chainId][TOKEN_CONTRACT];
+        return new library.eth.Contract(contract.abi, contract.address)
     }
 
     const getPresaleContract = () => {
-        if (active){
-            const contract = contracts[chainId][TOKEN_CONTRACT];
-            return library.eth.Contract(contract.abi, contract.address);
+        if (!active) {
+            alertError("Wallet must be connected.");
+            return false;
         }
+        if (!contracts[chainId] || !contracts[chainId][PRESALE_CONTRACT].address){
+            alertError("Presale contract is not supported on this chain");
+            return false;
+        }
+        const contract = contracts[chainId][PRESALE_CONTRACT];
+        console.log(contract)
+        return new library.eth.Contract(contract.abi, contract.address);
+
     }
 
     return (
-        <NistContext.Provider value={{getNistContract, getPresaleContract}}>
+        <NistContext.Provider value={{getNistContract, getPresaleContract, failedActivate}}>
             {props.children}
         </NistContext.Provider>
     )

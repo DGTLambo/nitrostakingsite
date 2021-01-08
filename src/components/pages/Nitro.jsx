@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet'
 
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
-import { Typography } from '@material-ui/core';
+import {Tooltip, Typography} from '@material-ui/core';
 import {round} from "../../Utils";
 import {useAlerts} from "../AlertProvider";
 import Section from "../Section";
@@ -11,6 +11,11 @@ import Button from "@material-ui/core/Button";
 import {useWeb3React} from "@web3-react/core";
 import {injected} from "../../connectors";
 import {config} from "../../config";
+import {useNist} from "../NistProvider";
+import Web3 from "web3";
+import {toNist} from "../../abis/token";
+import IconButton from "@material-ui/core/IconButton";
+import InfoIcon from '@material-ui/icons/Info';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -75,28 +80,23 @@ const useStyles = makeStyles((theme) => ({
 
 function NitroPage() {
   const classes = useStyles()
-  const {active, activate, account} = useWeb3React()
+  const { active, activate, account, chainId} = useWeb3React();
   const {alertSuccess, alertError} = useAlerts();
   const [bonus, setBonus] = useState(0);
   const [penalty, setPenalty] = useState(0)
   const [twap, setTwap] = useState(0);
   const [realPrice, setRealPrice] = useState(0);
-  const [currentBlock, setCurrentBlock] = useState(0);
   const [deltaTwapUpdate, setDeltaTwapUpdate] = useState(0);
   const [lastTwapUpdate, setLastTwapUpdate] = useState(0);
+  const [rewards, setRewards] = useState(0);
+  const [staking, setStaking] = useState(0);
+  const [claiming, setClaiming] = useState(false);
   const [timeLeftBeforeTwapUpdate, setTimeLeftBeforeTwapUpdate] = useState("");
-
-
-  useEffect(()=>{
-    if (active){
-      //loadNitroInfo()
-    }
-  },[active])
+  const {getNistContract} = useNist();
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       setTimeLeftBeforeTwapUpdate(getTimeLeftBeforeTwapUpdate());
-
     },1000)
     return ()=>{
       clearInterval(intervalId);
@@ -105,45 +105,55 @@ function NitroPage() {
 
   useEffect(()=>{
     if (active){
+      loadNitroInfo()
       const intervalId = setInterval(() => {
-        //loadNitroInfo();
+        loadNitroInfo();
       },500)
       return ()=>{
         clearInterval(intervalId);
       }
     }
-  }, [active])
+  }, [active, account, chainId])
 
-/*  const loadNitroInfo = () =>{
-    getProvider().then(({web3}) => {
-      const contract = new web3.eth.Contract(tokenContract.abi, tokenContract.address);
-      contract.methods.calculateCurrentNitroRate(true).call()
-          .then(buyNitroRate => setBonus(web3.utils.fromWei(buyNitroRate,'ether')))
-          .catch(() => {});
-      contract.methods.calculateCurrentNitroRate(false).call()
-          .then(sellNitroRate => setPenalty(web3.utils.fromWei(sellNitroRate,'ether')))
-          .catch(() => {});
-      contract.methods.getLastLongTwap().call()
-          .then(twap => setTwap(web3.utils.fromWei(twap, 'ether')))
-          .catch((e) => {
-            console.log(e);
-            alertError("Couldn't load current TWAP")
-          });
-      contract.methods.getLastShortTwap().call()
-          .then(twap => setRealPrice(web3.utils.fromWei(twap, 'ether')))
-          .catch((e) => {
-            console.log(e);
-            alertError("Couldn't load current TWAP")
-          });
-      web3.eth.getBlockNumber().then(setCurrentBlock);
-      contract.methods.minDeltaTwapLong().call()
-          .then(setDeltaTwapUpdate);
-      contract.methods.blockTimestampLastLong().call()
-          .then(setLastTwapUpdate);
-    }).catch((error) => {
-      console.log(error)
-    })
-  }*/
+  const loadNitroInfo = () =>{
+      const contract = getNistContract();
+      if (contract) {
+          contract.methods.calculateCurrentNitroRate().call()
+              .then(nitroRate => {
+                setPenalty(Web3.utils.fromWei(nitroRate[0],'ether'))
+                setBonus(Web3.utils.fromWei(nitroRate[1], 'ether'))
+              })
+              .catch(() => {
+                alertError("Couldn't load Nitro rate");
+              });
+
+          contract.methods.getLastLongTwap().call()
+              .then(twap => setTwap(toNist(twap)))
+              .catch((e) => {
+                alertError("Couldn't load current TWAP");
+              });
+
+          contract.methods.getLastShortTwap().call()
+              .then(twap => setRealPrice(toNist(twap)))
+              .catch((e) => {
+                alertError("Couldn't load current price")
+              });
+          contract.methods.minDeltaTwapLong().call()
+              .then(setDeltaTwapUpdate);
+
+          contract.methods.blockTimestampLastLong().call()
+              .then(setLastTwapUpdate);
+
+          contract.methods.calculateRewardWithFee(account).call()
+              .then(reward => setRewards(Web3.utils.fromWei(reward)))
+              .catch(() => {
+                alertError("Couldn't load pending rewards")
+              })
+          contract.methods.stakeOf(account).call()
+              .then(staked => setStaking(toNist(staked)))
+      }
+
+  }
 
   const getTimeLeftBeforeTwapUpdate = () => {
     const timeLeft = (Number(lastTwapUpdate)+Number(deltaTwapUpdate)) - Date.now()/1000;
@@ -161,16 +171,35 @@ function NitroPage() {
   }
 
   const getETHPerLambo = () => {
+    if (!realPrice){
+      return 0;
+    }
     return 1/realPrice;
   }
 
   const buyPrice = () =>{
+    if (!realPrice){
+      return 0;
+    }
     return 1/(realPrice*(1+Number(bonus)));
   }
 
   const sellPrice = () =>{
     const ethLambo = getETHPerLambo();
     return ethLambo*(1-Number(penalty));
+  }
+
+  const handleClaim = () => {
+      const nistContract = getNistContract();
+      setClaiming(true);
+      nistContract.methods.claimRewardsPublic(account).send({ from: account})
+          .then(() => {
+            setClaiming(false);
+            alertSuccess("Your have received your rewards")
+          }).catch(() => {
+            setClaiming(false);
+            alertError("An error happened while claiming")
+      })
   }
 
   return (
@@ -197,13 +226,13 @@ function NitroPage() {
               Nitro
             </Typography>
             <Box p={2}>
-              <Typography variant={'body1'} component={"p"}>
+              <Typography variant={'body1'}>
                 Monitor the buy price and sell price with ease. The prices on the right factor in the bonus when buying and the penalty when selling.
               </Typography>
-              <Typography variant={'p'} component={"p"}>
+              <Typography variant={'body1'}>
 
               </Typography>
-              <Typography variant={'body1'} component={"p"}>
+              <Typography variant={'body1'}>
                 Itching to get an edge in the game? Learn more nerdy details on our <a href={"https://lambodegens.medium.com/lambo-boosting-the-trust-and-value-in-the-defi-world-6fc8c369f7bc"} target={"_blank"}>Medium account</a>.
               </Typography>
             </Box>
@@ -235,8 +264,22 @@ function NitroPage() {
         <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"} mb={1}>
           <Typography variant={"h5"}>Sell</Typography>
           <Box>
-            <Typography variant={"h5"}>Current nitro: {round(bonus,4)*100}%</Typography>
-            <Typography>Slippage: X%</Typography>
+            <Typography variant={"h5"}>
+              Buy nitro: {round(bonus,4)*100}%
+              -
+              Sell nitro: {round(penalty,4)*100}%
+              <Tooltip title={
+                <Box p={1}>
+                  <Typography variant={"body1"}>
+                    Set your sell slippage to at least {(1-(1/(1-penalty)))}%
+                  </Typography>
+                </Box>
+              } arrow>
+                <IconButton color={"secondary"}>
+                  <InfoIcon/>
+                </IconButton>
+              </Tooltip>
+            </Typography>
           </Box>
           <Typography variant={"h5"}>Buy</Typography>
         </Box>
@@ -247,19 +290,35 @@ function NitroPage() {
         </Box>
       </Section>
       <Section className={classes.paddedSection}>
-        <Box display={"flex"} flexWrap={"wrap"} justifyContent={"space-around"}>
-          <Typography component={'h2'} variant={'h3'} align={'center'}>
-            Staking rewards
-          </Typography>
+        <Box display={"flex"} flexWrap={"wrap"} justifyContent={"space-around"} alignItems={"center"}>
+          <Box>
+            <Typography component={'h2'} variant={'h3'} align={'center'}>
+              Staking rewards
+            </Typography>
+            <Typography variant={"h6"}>
+              Your stake: {staking} {config.ticker}
+            </Typography>
+          </Box>
           <Box textAlign={"center"}>
-            <Typography component={'p'} variant={'h6'} align={'center'} gutterBottom={true}>
-              Your status: Not eligible
+            <Typography component={'p'} align={'center'} gutterBottom={true}>
+              Automatic payout: {staking>=config.stakingMinRequired?<Typography component={"span"} color={"success"}>enabled</Typography>:<Typography component={"span"} color={"error"}>disabled</Typography>}
+              <Tooltip title={
+                <Box p={1}>
+                  <Typography variant={"body1"}>
+                    You need to hold a minimum of {config.stakingMinRequired} {config.ticker} to qualify for automatic reward.
+                  </Typography>
+                </Box>
+              } arrow>
+                <IconButton color={"secondary"}>
+                  <InfoIcon/>
+                </IconButton>
+              </Tooltip>
             </Typography>
-            <Typography component={'p'} variant={'h6'} align={'center'} gutterBottom={true}>
-              Pending rewards: 0 ETH
+            <Typography component={'p'} align={'center'} gutterBottom={true}>
+              Pending rewards: {rewards} ETH
             </Typography>
-            <Button color={"primary"} variant={"contained"}>
-              Claim
+            <Button color={"primary"} variant={"contained"} disabled={rewards <= 0 || claiming}>
+              {claiming?"Claiming...":"Claim"}
             </Button>
           </Box>
         </Box>

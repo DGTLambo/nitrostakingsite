@@ -128,19 +128,17 @@ const theme = createMuiTheme({
         color: "#FFF"
       },
       containedPrimary: {
-        boxShadow: `0 0 2px 1px ${primaryColor}, 0 0 10px 3px ${primaryColor}`,
-        '&:hover': {
+        boxShadow: primaryShadow,
+        '&:hover, &$disabled': {
           boxShadow: "none"
-        }
+        },
+
       },
       outlinedSecondary: {
         border: `4px solid ${secondaryColor}`,
         '&:hover': {
           border: `4px solid ${secondaryColor}`,
         }
-      },
-      "&$disabled": {
-        boxShadow: "none",
       },
       outlined: {
         borderWidth: "30px"
