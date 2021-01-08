@@ -267,7 +267,7 @@ function NitroPage() {
             <Typography variant={"h5"}>
               Buy nitro: {round(bonus,4)*100}%
               -
-              Sell nitro: {round(penalty,4)*100}%{penalty}
+              Sell nitro: {round(penalty,4)*100}%
               <Tooltip title={
                 <Box p={1}>
                   <Typography variant={"body1"}>
