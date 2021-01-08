@@ -36,7 +36,7 @@ export default function NistProvider(props){
             return false;
         }
         if (!contracts[chainId] || !contracts[chainId][TOKEN_CONTRACT].address){
-            alertError("Nist contract is not supported on this chain");
+            alertError("Nist contract is not supported on this network");
             return false;
         }
         const contract = contracts[chainId][TOKEN_CONTRACT];
@@ -49,7 +49,7 @@ export default function NistProvider(props){
             return false;
         }
         if (!contracts[chainId] || !contracts[chainId][PRESALE_CONTRACT].address){
-            alertError("Presale contract is not supported on this chain");
+            alertError("Presale contract is not supported on this network");
             return false;
         }
         const contract = contracts[chainId][PRESALE_CONTRACT];
@@ -63,7 +63,7 @@ export default function NistProvider(props){
             return false;
         }
         if (!contracts[chainId] || !contracts[chainId][LAMBO_CONTRACT].address){
-            alertError("Lambo contract is not supported on this chain");
+            alertError("Lambo contract is not supported on this network");
             return false;
         }
         const contract = contracts[chainId][LAMBO_CONTRACT];

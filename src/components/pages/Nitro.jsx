@@ -267,11 +267,11 @@ function NitroPage() {
             <Typography variant={"h5"}>
               Buy nitro: {round(bonus,4)*100}%
               -
-              Sell nitro: {round(penalty,4)*100}%
+              Sell nitro: {round(penalty,4)*100}%{penalty}
               <Tooltip title={
                 <Box p={1}>
                   <Typography variant={"body1"}>
-                    Set your sell slippage to at least {(1-(1/(1-penalty)))}%
+                    Set your sell slippage to at least {round(((1/(1-penalty))-1)*100,4)}%
                   </Typography>
                 </Box>
               } arrow>
