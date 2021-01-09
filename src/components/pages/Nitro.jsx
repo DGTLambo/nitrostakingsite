@@ -317,7 +317,7 @@ function NitroPage() {
             <Typography component={'p'} align={'center'} gutterBottom={true}>
               Pending rewards: {rewards} ETH
             </Typography>
-            <Button color={"primary"} variant={"contained"} disabled={rewards <= 0 || claiming}>
+            <Button color={"primary"} variant={"contained"} disabled={rewards <= 0 || claiming} onClick={handleClaim}>
               {claiming?"Claiming...":"Claim"}
             </Button>
           </Box>

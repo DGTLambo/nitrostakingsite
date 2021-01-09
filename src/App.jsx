@@ -145,7 +145,7 @@ const theme = createMuiTheme({
       outlined: {
         borderWidth: "30px"
       }
-    }
+    },
   },
 });
 
