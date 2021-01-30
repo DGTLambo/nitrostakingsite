@@ -194,14 +194,14 @@ export default function Presale(props){
                     <Typography variant={"h3"} component={"h1"} align={"center"} style={{marginRight:8}}>Presale</Typography>
                     <Box className={classBag(classes.phase, getPhase() === 1?classes.activePhase: false)}>
                         <Typography variant={"h4"} component={"h2"}>Phase 1</Typography>
-                        <Typography variant={"h6"}>Starts January 9th</Typography>
+                        <Typography variant={"h6"}>Starts January 30th</Typography>
                         <Typography> 1 LAMBO = 1 {config.ticker}</Typography>
                         <Typography>No limit</Typography>
                         <Typography>No cap</Typography>
                     </Box>
                     <Box className={classBag(classes.phase, getPhase() === 2?classes.activePhase: false)}>
                         <Typography variant={"h4"} component={"h2"}>Phase 2</Typography>
-                        <Typography variant={"h6"}>Starts January 10th</Typography>
+                        <Typography variant={"h6"}>Starts February 2nd</Typography>
                         <Typography> 0.5 ETH = 1 {config.ticker}</Typography>
                         <Typography>{round(investedAmount,2)}/0.5 ETH per wallet</Typography>
                         <Typography>{round(contractBalance,2)}/30 ETH</Typography>

@@ -182,7 +182,7 @@ class App extends React.Component {
                           >
                             <Box className={classes.navContainer}>
                               <DegenNavbar>
-                                <Typography>Presale starts on January 9th</Typography>
+                                <Typography>Presale is available now!</Typography>
                                 <Box ml={2}></Box>
                                 <Button color={"secondary"} variant={"outlined"} component={Link} to={"/presale"}>Visit presale</Button>
                               </DegenNavbar>

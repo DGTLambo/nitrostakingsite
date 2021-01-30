@@ -135,7 +135,7 @@ function Homepage() {
       <Paper className={classes.card}>
         <Typography component={"h3"} variant={"h5"} align={"center"}>Automatic payout</Typography>
         <Typography component={"p"}>
-          Hold {config.stakingMinRequired} {config.ticker} minimum (more {config.ticker} means more income) to receive your Ethereuem
+          Hold {config.stakingMinRequired} {config.ticker} minimum (more {config.ticker} means more income) to receive your Ethereum
           staking rewards directly to your wallet. Your rewards will be accumulated
           until it reaches {config.minEthForAutomaticReward} ETH. If you want to claim them before, you can do so
           in the NIST dashboard.

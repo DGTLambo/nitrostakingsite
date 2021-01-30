@@ -9,11 +9,11 @@ export const LAMBO_CONTRACT = "lambo";
 export const contracts = {
     1: {
         [TOKEN_CONTRACT]: {
-            address: null,
+            address: "0xa685DE9089e258EE77B86ECafcaBd9D3aC8Ba458",
             abi: tokenAbi
         },
         [PRESALE_CONTRACT]: {
-            address: null,
+            address: "0x6b9d45a5084e715fF3a978b11a4863E2D6d889fd",
             abi: presaleAbi,
         },
         [LAMBO_CONTRACT]:{
