@@ -206,7 +206,7 @@ function NitroPage() {
     <div className={classes.wrapper}>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Nitro | Lambo Degenerates</title>
+        <title>Nitro | {config.appName}</title>
       </Helmet>
       <Section>
         {!active && (

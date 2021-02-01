@@ -13,6 +13,7 @@ import {useNist} from "../NistProvider";
 import {injected} from "../../connectors";
 import {useAlerts} from "../AlertProvider";
 import Web3 from "web3";
+import {Helmet} from "react-helmet";
 
 const useStyle = makeStyles(theme => ({
     phases: {
@@ -178,6 +179,10 @@ export default function Presale(props){
 
     return (
         <>
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>Presale | {config.appName}</title>
+            </Helmet>
             {!active && (
                 <Box textAlign={"center"} pb={3}>
                     <Typography variant={"h6"} gutterBottom={true}>Connect your wallet to have access to the dashboard</Typography>
